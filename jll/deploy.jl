@@ -6,11 +6,11 @@ const linux_repo = "mousetrap_linux_jll"
 const windows_repo = "mousetrap_windows_jll"
 const apple_repo = "mousetrap_apple_jll"
 
-const deploy_linux = true
-const deploy_windows = false
+const deploy_linux = false
+const deploy_windows = true
 const deploy_apple = false
 
-const deploy_local = false
+const deploy_local = true
 # if local, files will be written to ~/.julia/dev/mousetrap_[linux,windows,apple]_jll
 
 println("deploy linux   : $deploy_linux")
@@ -40,7 +40,7 @@ if deploy_linux
     @info "Configuring `linux/build_tarballs.jl`"
     configure_file("./linux/build_tarballs.jl.in", "./linux/build_tarballs.jl")
 
-    path = "/home/clem/.julia/dev/$linux_repo"
+    path = joinpath(pwd(), "$linux_repo")
     if isfile(path)
         run(`rm -r $path`)
     end
@@ -50,7 +50,7 @@ if deploy_windows
     @info "Configuring `windows/build_tarballs.jl`"
     configure_file("./windows/build_tarballs.jl.in", "./windows/build_tarballs.jl")
 
-    path = "/home/clem/.julia/dev/$windows_repo"
+    path = joinpath(pwd(), "$windows_repo")
     if isfile(path)
         run(`rm -r $path`)
     end
@@ -60,7 +60,7 @@ if deploy_apple
     @info "Configuring `apple/build_tarballs.jl`"
     configure_file("./apple/build_tarballs.jl.in", "./apple/build_tarballs.jl")
 
-    path = "/home/clem/.julia/dev/$apple_repo"
+    path = joinpath(pwd(), "$apple_repo")
     if isfile(path)
         run(`rm -r $path`)
     end
