@@ -7,8 +7,8 @@ version = v"@VERSION@"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/Clemapfel/mousetrap.git", "@MOUSETRAP_COMMIT@"),
-    GitSource("https://github.com/Clemapfel/mousetrap_julia_binding.git", "@MOUSETRAP_JULIA_BINDING_COMMIT@")
+    GitSource("https://github.com/@MOUSETRAP_AUTHOR@/mousetrap.git", "@MOUSETRAP_COMMIT@"),
+    GitSource("https://github.com/@MOUSETRAP_AUTHOR@/mousetrap_julia_binding.git", "@MOUSETRAP_JULIA_BINDING_COMMIT@")
 ]
 
 # Bash recipe for building across all platforms

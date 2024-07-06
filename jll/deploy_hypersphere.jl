@@ -2,7 +2,7 @@ const VERSION = "0.2.1"
 
 const author = "HyperSphereStudio"
 const mousetrap_commit = "74507a0bffcfa29d11bd2b5e68268651f36afe7a"
-const mousetrap_julia_binding_commit = "2a21319801c35ee9a0ffee177a75908490b3bd45"
+const mousetrap_julia_binding_commit = "7a9dc111ae1c0dde187e8d0386082af9b46d0e1d"
 
 const linux_repo = "hypmousetrap_linux_jll"
 const windows_repo = "hypmousetrap_windows_jll"
