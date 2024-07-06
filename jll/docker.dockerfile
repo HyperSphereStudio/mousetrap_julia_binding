@@ -1,18 +1,14 @@
-# Dockerfile for Julia
+FROM debian:latest
 
-# Use a base image with Ubuntu or Debian
-FROM ubuntu:latest
-
-# Set environment variables for Julia version and installation path
-ENV JULIA_VERSION=1.7.0
-ENV JULIA_DIR=/usr/local/julia
-
-# Install necessary tools
 RUN apt-get update \
     && apt-get install -y \
-       curl \
-       gnupg \
-       && rm -rf /var/lib/apt/lists/*
+        curl	\
+		sudo 	\
+    && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables for Julia version and installation path
+ENV JULIA_VERSION=1.8.0
+ENV JULIA_DIR=/workspace/julia
 
 # Download and install Julia
 RUN curl -sSL "https://julialang-s3.julialang.org/bin/linux/x64/${JULIA_VERSION%.*}/julia-${JULIA_VERSION}-linux-x86_64.tar.gz" -o julia.tar.gz \
@@ -24,7 +20,7 @@ RUN curl -sSL "https://julialang-s3.julialang.org/bin/linux/x64/${JULIA_VERSION%
 ENV PATH=$JULIA_DIR/bin:$PATH
 
 # Run Julia once to precompile base libraries
-RUN julia -e 'using Pkg; Pkg.update(); Pkg.precompile()'
+RUN julia -e 'using Pkg; Pkg.add("BinaryBuilder"); Pkg.precompile()'
 
 # Set the working directory for the container
 WORKDIR /workspace

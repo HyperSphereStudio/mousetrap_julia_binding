@@ -1,18 +1,20 @@
-const VERSION = "0.2.0"
+const VERSION = "0.2.1"
 
 const author = "HyperSphereStudio"
-const mousetrap_commit = "ce80b9ac063170419ffd989921b7d975b74fda72"
-const mousetrap_julia_binding_commit = "f1e9b350873591c31e258c89fbe962a032e0c031"
+const mousetrap_commit = "74507a0bffcfa29d11bd2b5e68268651f36afe7a"
+const mousetrap_julia_binding_commit = "2a21319801c35ee9a0ffee177a75908490b3bd45"
 
-const linux_repo = "mousetrap_linux_jll"
-const windows_repo = "mousetrap_windows_jll"
-const apple_repo = "mousetrap_apple_jll"
+const linux_repo = "hypmousetrap_linux_jll"
+const windows_repo = "hypmousetrap_windows_jll"
+const apple_repo = "hypmousetrap_apple_jll"
 
-const deploy_linux = false
+const deploy_linux = true
 const deploy_windows = true
-const deploy_apple = false
+const deploy_apple = true
 
-const deploy_local = true
+const deploy_local = false
+
+# if local, files will be written to ~/.julia/dev/mousetrap_[linux,windows,apple]_jll
 
 println("deploy linux   : $deploy_linux")
 println("deploy windows : $deploy_windows")
@@ -42,7 +44,7 @@ if deploy_linux
     @info "Configuring `linux/build_tarballs.jl`"
     configure_file("./linux/build_tarballs.jl.in", "./linux/build_tarballs.jl")
 
-    path = "$linux_repo"
+    path = joinpath(pwd(), "$linux_repo")
     if isfile(path)
         run(`rm -r $path`)
     end
@@ -52,7 +54,7 @@ if deploy_windows
     @info "Configuring `windows/build_tarballs.jl`"
     configure_file("./windows/build_tarballs.jl.in", "./windows/build_tarballs.jl")
 
-    path = "$windows_repo"
+    path = joinpath(pwd(), "$windows_repo")
     if isfile(path)
         run(`rm -r $path`)
     end
@@ -62,7 +64,7 @@ if deploy_apple
     @info "Configuring `apple/build_tarballs.jl`"
     configure_file("./apple/build_tarballs.jl.in", "./apple/build_tarballs.jl")
 
-    path = "$apple_repo"
+    path = joinpath(pwd(), "$apple_repo")
     if isfile(path)
         run(`rm -r $path`)
     end
@@ -71,7 +73,7 @@ end
 ## Build
 
 function run_deploy(repo::String)
-    run(`julia -t 8 build_tarballs.jl --debug --verbose --deploy=$repo`)
+    run(Cmd(`sudo /workspace/julia/bin/julia -t 8 build_tarballs.jl --debug --verbose --deploy=$repo`; env= ("BINARYBUILDER_RUNNER" => "privileged", )))
 end
 
 cd("./linux")
@@ -80,7 +82,7 @@ if deploy_linux
     if deploy_local
         run_deploy("local")
     else
-        run_deploy("Clemapfel/$linux_repo")
+        run_deploy("$author/$linux_repo")
     end
 end
 
@@ -91,7 +93,7 @@ if deploy_windows
     if deploy_local
         run_deploy("local")
     else
-        run_deploy("Clemapfel/$windows_repo")
+        run_deploy("$author/$windows_repo")
     end
 end
 
@@ -102,8 +104,11 @@ if deploy_apple
     if deploy_local
         run_deploy("local")
     else
-        run_deploy("Clemapfel/$apple_repo")
+        run_deploy("$author/$apple_repo")
     end
 end
 
 cd("..")
+
+end
+
