@@ -36,11 +36,9 @@ void implement_shape(jlcxx::Module& module)
     ;
 
     static auto unbox_vector_of_vec2 = [](jl_value_t* in) -> std::vector<Vector2f> {
-
         std::vector<Vector2f> out;
-
         for (uint64_t i = 0; i < jl_array_len(in); ++i)
-            out.push_back(unbox_vector2f(jl_arrayref((jl_array_t*) in, i)));
+            out.push_back(unbox_vector2f(jl_array_ptr_data((jl_array_t *) in)[i]));
         return out;
     };
 
@@ -79,14 +77,15 @@ void implement_shape(jlcxx::Module& module)
         std::vector<std::pair<Vector2f, Vector2f>> vec;
         vec.resize(jl_array_len(vec_of_tuple));
 
-        for (uint64_t i = 0; i < jl_array_len(vec_of_tuple); ++i)
-        {
+        for (uint64_t i = 0; i < jl_array_len(vec_of_tuple); ++i){
             static auto* getindex = jl_get_function(jl_base_module, "getindex");
-
-            auto* tuple = jl_arrayref((jl_array_t*) vec_of_tuple, i);
+			static auto* one = jl_box_int64(1);
+			static auto* two = jl_box_int64(2);
+				
+            auto* tuple = jl_calln(getindex, vec_of_tuple, jl_box_int64(i));
             vec.emplace_back(
-            unbox_vector2f(jl_calln(getindex, tuple, jl_box_int64(1))),
-            unbox_vector2f(jl_calln(getindex, tuple, jl_box_int64(2)))
+				unbox_vector2f(jl_calln(getindex, tuple, one)),
+				unbox_vector2f(jl_calln(getindex, tuple, two))
             );
         }
 

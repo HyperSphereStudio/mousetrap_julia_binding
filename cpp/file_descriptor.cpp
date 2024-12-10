@@ -42,8 +42,8 @@ void implement_file_descriptor(jlcxx::Module& module)
         jl_calln(resize, out, jl_box_int64(children.size()));
 
         for (uint64_t i = 0; i < children.size(); ++i)
-            jl_arrayset((jl_array_t*) out, jl_box_voidpointer(children.at(i).get_internal()), i);
-
+			jl_array_ptr_set((jl_array_t*) out, i, jl_box_voidpointer(children.at(i).get_internal()));
+		
         return out;
     })
     ;

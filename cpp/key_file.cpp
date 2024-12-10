@@ -40,7 +40,7 @@ void implement_key_file(jlcxx::Module& module)
         key_file.method("set_value_as_" + std::string(name) + "_list!", [](KeyFile& file, KeyFile::GroupID group_id, KeyFile::KeyID key_id, jl_value_t* in) { \
             std::vector<type> vec; \
             for (uint64_t i = 0; i < jl_array_len(in); ++i) \
-                vec.push_back(jlcxx::unbox<type>(jl_arrayref((jl_array_t*) in, i))); \
+                vec.push_back(jlcxx::unbox<type>(jl_array_ptr_ref(list, i))); \
             file.set_value_as<std::vector<type>>(group_id, key_id, vec); \
         });
 
@@ -86,9 +86,8 @@ void implement_key_file(jlcxx::Module& module)
     key_file.method("set_value_as_string_list!", [](KeyFile& file, KeyFile::GroupID group, KeyFile::KeyID key, jl_value_t* list){
 
         auto vec = std::vector<std::string>();
-        for (uint64_t i = 0; i < jl_array_len(list); ++i)
-        {
-            auto* ptr = jl_string_ptr(jl_arrayref((jl_array_t*) list, i));
+        for (uint64_t i = 0; i < jl_array_len(list); ++i){
+            auto* ptr = jl_string_ptr(jl_array_ptr_ref(list, i));
             if (ptr != nullptr)
                 vec.emplace_back(ptr);
         }
