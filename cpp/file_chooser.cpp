@@ -50,7 +50,7 @@ void implement_file_chooser(jlcxx::Module& module)
             jl_calln(resize, out, jl_box_int64(files.size()));
 
             for (uint64_t i = 0; i < files.size(); ++i)
-				jl_array_ptr_set((jl_array_t*) out, i, jl_box_voidpointer(files.at(i).get_internal()));
+				jl_array_data_(out)[i] = files.at(i).get_internal();
 
             jl_safe_call("FileChooser::on_accept", task, jlcxx::box<FileChooser&>(self), out);
         }, gc_protect(self, task));
