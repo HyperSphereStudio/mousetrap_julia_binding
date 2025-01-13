@@ -1,7 +1,7 @@
 #include "../mousetrap_julia_binding.hpp"
 #include <thread>
 
-#define MOUSETRAP_ENABLE_OPENGL_COMPONENT 0
+//#define MOUSETRAP_ENABLE_OPENGL_COMPONENT 0
 
 JLCXX_MODULE define_julia_module(jlcxx::Module& module)
 {
